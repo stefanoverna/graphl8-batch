@@ -1,4 +1,4 @@
-class RecordLoader < GraphQL::Batch::Loader
+class RecordLoader < GraphQL8::Batch::Loader
   def initialize(model, column: model.primary_key, where: nil)
     @model = model
     @column = column.to_s

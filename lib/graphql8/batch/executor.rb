@@ -1,4 +1,4 @@
-module GraphQL::Batch
+module GraphQL8::Batch
   class Executor
     THREAD_KEY = :"#{name}.batched_queries"
     private_constant :THREAD_KEY
@@ -75,7 +75,7 @@ module GraphQL::Batch
 
     def around_promise_callbacks
       # We need to set #loading to false so that any queries that happen in the promise
-      # callback aren't interpreted as being performed in GraphQL::Batch::Loader#perform
+      # callback aren't interpreted as being performed in GraphQL8::Batch::Loader#perform
       was_loading = @loading
       @loading = false
       yield

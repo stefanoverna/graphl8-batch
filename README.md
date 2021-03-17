@@ -1,7 +1,7 @@
-# GraphQL::Batch
+# GraphQL8::Batch
 
-[![Build Status](https://travis-ci.org/Shopify/graphql-batch.svg?branch=master)](https://travis-ci.org/Shopify/graphql-batch)
-[![Gem Version](https://badge.fury.io/rb/graphql-batch.svg)](https://rubygems.org/gems/graphql-batch)
+[![Build Status](https://travis-ci.org/Shopify/graphql8-batch.svg?branch=master)](https://travis-ci.org/Shopify/graphql8-batch)
+[![Gem Version](https://badge.fury.io/rb/graphql8-batch.svg)](https://rubygems.org/gems/graphql8-batch)
 
 Provides an executor for the [`graphql` gem](https://github.com/rmosolgo/graphql-ruby) which allows queries to be batched.
 
@@ -10,7 +10,7 @@ Provides an executor for the [`graphql` gem](https://github.com/rmosolgo/graphql
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'graphql-batch'
+gem 'graphql8-batch'
 ```
 
 And then execute:
@@ -19,7 +19,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install graphql-batch
+    $ gem install graphql8-batch
 
 ## Usage
 
@@ -30,13 +30,13 @@ Or install it yourself as:
 Require the library
 
 ```ruby
-require 'graphql/batch'
+require 'graphql8/batch'
 ```
 
 Define a custom loader, which is initialized with arguments that are used for grouping and a perform method for performing the batch load.
 
 ```ruby
-class RecordLoader < GraphQL::Batch::Loader
+class RecordLoader < GraphQL8::Batch::Loader
   def initialize(model)
     @model = model
   end
@@ -48,26 +48,26 @@ class RecordLoader < GraphQL::Batch::Loader
 end
 ```
 
-Use `GraphQL::Batch` as a plugin in your schema _after_ specifying the mutation
-so that `GraphQL::Batch` can extend the mutation fields to clear the cache after
+Use `GraphQL8::Batch` as a plugin in your schema _after_ specifying the mutation
+so that `GraphQL8::Batch` can extend the mutation fields to clear the cache after
 they are resolved (for graphql >= `1.5.0`).
 
 ```ruby
-class MySchema < GraphQL::Schema
+class MySchema < GraphQL8::Schema
   query MyQueryType
   mutation MyMutationType
 
-  use GraphQL::Batch
+  use GraphQL8::Batch
 end
 ```
 
 For pre `1.5.0` versions:
 
 ```ruby
-MySchema = GraphQL::Schema.define do
+MySchema = GraphQL8::Schema.define do
   query MyQueryType
 
-  GraphQL::Batch.use(self)
+  GraphQL8::Batch.use(self)
 end
 ```
 
@@ -100,12 +100,12 @@ end
 Although this library doesn't have a dependency on active record,
 the [examples directory](examples) has record and association loaders
 for active record which handles edge cases like type casting ids
-and overriding GraphQL::Batch::Loader#cache_key to load associations
+and overriding GraphQL8::Batch::Loader#cache_key to load associations
 on records with the same id.
 
 ### Promises
 
-GraphQL::Batch::Loader#load returns a Promise using the [promise.rb gem](https://rubygems.org/gems/promise.rb) to provide a promise based API, so you can transform the query results using `.then`
+GraphQL8::Batch::Loader#load returns a Promise using the [promise.rb gem](https://rubygems.org/gems/promise.rb) to provide a promise based API, so you can transform the query results using `.then`
 
 ```ruby
 def product_title(id:)
@@ -154,8 +154,8 @@ end
 
 ## Unit Testing
 
-Your loaders can be tested outside of a GraphQL query by doing the
-batch loads in a block passed to GraphQL::Batch.batch.  That method
+Your loaders can be tested outside of a GraphQL8 query by doing the
+batch loads in a block passed to GraphQL8::Batch.batch.  That method
 will set up thread-local state to store the loaders, batch load any
 promise returned from the block then clear the thread-local state
 to avoid leaking state between tests.
@@ -163,7 +163,7 @@ to avoid leaking state between tests.
 ```ruby
   def test_single_query
     product = products(:snowboard)
-    title = GraphQL::Batch.batch do
+    title = GraphQL8::Batch.batch do
       RecordLoader.for(Product).load(product.id).then(&:title)
     end
     assert_equal product.title, title

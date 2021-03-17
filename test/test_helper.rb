@@ -1,5 +1,5 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-require 'graphql/batch'
+require 'graphql8/batch'
 
 require_relative 'support/loaders'
 require_relative 'support/schema'

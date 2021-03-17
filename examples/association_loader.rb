@@ -1,4 +1,4 @@
-class AssociationLoader < GraphQL::Batch::Loader
+class AssociationLoader < GraphQL8::Batch::Loader
   def self.validate(model, association_name)
     new(model, association_name)
     nil

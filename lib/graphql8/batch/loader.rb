@@ -1,13 +1,13 @@
-module GraphQL::Batch
+module GraphQL8::Batch
   class Loader
     def self.for(*group_args)
       loader_key = loader_key_for(*group_args)
       executor = Executor.current
 
       unless executor
-        raise GraphQL::Batch::NoExecutorError, 'Cannot create loader without'\
-          ' an Executor. Wrap the call to `for` with `GraphQL::Batch.batch`'\
-          ' or use `GraphQL::Batch::Setup` as a query instrumenter if'\
+        raise GraphQL8::Batch::NoExecutorError, 'Cannot create loader without'\
+          ' an Executor. Wrap the call to `for` with `GraphQL8::Batch.batch`'\
+          ' or use `GraphQL8::Batch::Setup` as a query instrumenter if'\
           ' using with `graphql-ruby`'
       end
 

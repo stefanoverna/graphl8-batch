@@ -1,8 +1,8 @@
 require_relative 'test_helper'
 
-class GraphQL::BatchTest < Minitest::Test
+class GraphQL8::BatchTest < Minitest::Test
   def test_batch
-    product = GraphQL::Batch.batch do
+    product = GraphQL8::Batch.batch do
       RecordLoader.for(Product).load(1)
     end
     assert_equal 'Shirt', product.title
@@ -12,9 +12,9 @@ class GraphQL::BatchTest < Minitest::Test
     promise1 = nil
     promise2 = nil
 
-    product = GraphQL::Batch.batch do
+    product = GraphQL8::Batch.batch do
       promise1 = RecordLoader.for(Product).load(1)
-      GraphQL::Batch.batch do
+      GraphQL8::Batch.batch do
         promise2 = RecordLoader.for(Product).load(1)
       end
       promise1
@@ -22,6 +22,6 @@ class GraphQL::BatchTest < Minitest::Test
 
     assert_equal 'Shirt', product.title
     assert_equal promise1, promise2
-    assert_nil GraphQL::Batch::Executor.current
+    assert_nil GraphQL8::Batch::Executor.current
   end
 end

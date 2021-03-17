@@ -1,7 +1,7 @@
 require_relative 'test_helper'
 
-class GraphQL::Batch::LoaderTest < Minitest::Test
-  class GroupCountLoader < GraphQL::Batch::Loader
+class GraphQL8::Batch::LoaderTest < Minitest::Test
+  class GroupCountLoader < GraphQL8::Batch::Loader
     def initialize(key)
     end
 
@@ -10,19 +10,19 @@ class GraphQL::Batch::LoaderTest < Minitest::Test
     end
   end
 
-  class EchoLoader < GraphQL::Batch::Loader
+  class EchoLoader < GraphQL8::Batch::Loader
     def perform(keys)
       keys.each { |key| fulfill(key, key) }
     end
   end
 
-  class IncrementLoader < GraphQL::Batch::Loader
+  class IncrementLoader < GraphQL8::Batch::Loader
     def perform(keys)
       keys.each { |key| fulfill(key, key + 1) }
     end
   end
 
-  class BrokenLoader < GraphQL::Batch::Loader
+  class BrokenLoader < GraphQL8::Batch::Loader
     def perform(keys)
     end
   end
@@ -33,24 +33,24 @@ class GraphQL::Batch::LoaderTest < Minitest::Test
     end
   end
 
-  class ExplodingLoader < GraphQL::Batch::Loader
+  class ExplodingLoader < GraphQL8::Batch::Loader
     def perform(_keys)
       raise 'perform failed'
     end
   end
 
   def setup
-    GraphQL::Batch::Executor.current = GraphQL::Batch::Executor.new
+    GraphQL8::Batch::Executor.current = GraphQL8::Batch::Executor.new
   end
 
   def teardown
-    GraphQL::Batch::Executor.current = nil
+    GraphQL8::Batch::Executor.current = nil
   end
 
   def test_no_executor
-    GraphQL::Batch::Executor.current = nil
+    GraphQL8::Batch::Executor.current = nil
 
-    assert_raises(GraphQL::Batch::NoExecutorError) do
+    assert_raises(GraphQL8::Batch::NoExecutorError) do
       EchoLoader.for
     end
   end
@@ -117,7 +117,7 @@ class GraphQL::Batch::LoaderTest < Minitest::Test
   def test_broken_promise_loader_check
     promise = BrokenLoader.load(1)
     promise.wait
-    assert_equal GraphQL::Batch::BrokenPromiseError, promise.reason.class
+    assert_equal GraphQL8::Batch::BrokenPromiseError, promise.reason.class
     assert_equal "#{BrokenLoader.name} didn't fulfill promise for key 1", promise.reason.message
   end
 
@@ -155,7 +155,7 @@ class GraphQL::Batch::LoaderTest < Minitest::Test
 
   def test_loader_for_without_load
     loader = EchoLoader.for
-    GraphQL::Batch::Executor.current.wait_all
+    GraphQL8::Batch::Executor.current.wait_all
   end
 
   def test_loader_without_executor

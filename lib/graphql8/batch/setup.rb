@@ -1,12 +1,12 @@
-module GraphQL::Batch
+module GraphQL8::Batch
   class Setup
     class << self
       def start_batching(executor_class)
-        GraphQL::Batch::Executor.start_batch(executor_class)
+        GraphQL8::Batch::Executor.start_batch(executor_class)
       end
 
       def end_batching
-        GraphQL::Batch::Executor.end_batch
+        GraphQL8::Batch::Executor.end_batch
       end
 
       def instrument_field(schema, type, field)
@@ -14,11 +14,11 @@ module GraphQL::Batch
         old_resolve_proc = field.resolve_proc
         field.redefine do
           resolve ->(obj, args, ctx) {
-            GraphQL::Batch::Executor.current.clear
+            GraphQL8::Batch::Executor.current.clear
             begin
               ::Promise.sync(old_resolve_proc.call(obj, args, ctx))
             ensure
-              GraphQL::Batch::Executor.current.clear
+              GraphQL8::Batch::Executor.current.clear
             end
           }
         end

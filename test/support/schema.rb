@@ -1,9 +1,9 @@
-class ImageType < GraphQL::Schema::Object
+class ImageType < GraphQL8::Schema::Object
   field :id, ID, null: false
   field :filename, String, null: false
 end
 
-class ProductVariantType < GraphQL::Schema::Object
+class ProductVariantType < GraphQL8::Schema::Object
   field :id, ID, null: false
   field :title, String, null: false
   field :image_ids, [ID, null: true], null: false
@@ -14,14 +14,14 @@ class ProductVariantType < GraphQL::Schema::Object
     end
   end
 
-  field :product, GraphQL::Schema::LateBoundType.new('Product'), null: false
+  field :product, GraphQL8::Schema::LateBoundType.new('Product'), null: false
 
   def product
     RecordLoader.for(Product).load(object.product_id)
   end
 end
 
-class ProductType < GraphQL::Schema::Object
+class ProductType < GraphQL8::Schema::Object
   field :id, ID, null: false
   field :title, String, null: false
   field :images, [ImageType], null: true
@@ -42,7 +42,7 @@ class ProductType < GraphQL::Schema::Object
   field :non_null_but_raises, String, null: false
 
   def non_null_but_raises
-    raise GraphQL::ExecutionError, 'Error'
+    raise GraphQL8::ExecutionError, 'Error'
   end
 
   field :variants, [ProductVariantType], null: true
@@ -59,7 +59,7 @@ class ProductType < GraphQL::Schema::Object
   end
 end
 
-class QueryType < GraphQL::Schema::Object
+class QueryType < GraphQL8::Schema::Object
   field :constant, String, null: false
 
   def constant
@@ -70,21 +70,21 @@ class QueryType < GraphQL::Schema::Object
 
   def load_execution_error
     RecordLoader.for(Product).load(1).then do |product|
-      raise GraphQL::ExecutionError, "test error message"
+      raise GraphQL8::ExecutionError, "test error message"
     end
   end
 
   field :non_null_but_raises, ProductType, null: false
 
   def non_null_but_raises
-    raise GraphQL::ExecutionError, 'Error'
+    raise GraphQL8::ExecutionError, 'Error'
   end
 
   field :non_null_but_promise_raises, String, null: false
 
   def non_null_but_promise_raises
     NilLoader.load.then do
-      raise GraphQL::ExecutionError, 'Error'
+      raise GraphQL8::ExecutionError, 'Error'
     end
   end
 
@@ -115,7 +115,7 @@ class QueryType < GraphQL::Schema::Object
   end
 end
 
-class CounterType < GraphQL::Schema::Object
+class CounterType < GraphQL8::Schema::Object
   field :value, Int, null: false
 
   def value
@@ -129,7 +129,7 @@ class CounterType < GraphQL::Schema::Object
   end
 end
 
-class IncrementCounterMutation < GraphQL::Schema::Mutation
+class IncrementCounterMutation < GraphQL8::Schema::Mutation
   null false
   payload_type CounterType
 
@@ -139,7 +139,7 @@ class IncrementCounterMutation < GraphQL::Schema::Mutation
   end
 end
 
-class CounterLoaderMutation < GraphQL::Schema::Mutation
+class CounterLoaderMutation < GraphQL8::Schema::Mutation
   null false
   payload_type Int
 
@@ -148,7 +148,7 @@ class CounterLoaderMutation < GraphQL::Schema::Mutation
   end
 end
 
-class NoOpMutation < GraphQL::Schema::Mutation
+class NoOpMutation < GraphQL8::Schema::Mutation
   null false
   payload_type QueryType
 
@@ -158,13 +158,13 @@ class NoOpMutation < GraphQL::Schema::Mutation
 end
 
 if ENV["TESTING_INTERPRETER"] == "true"
-  class MutationType < GraphQL::Schema::Object
+  class MutationType < GraphQL8::Schema::Object
     field :increment_counter, mutation: IncrementCounterMutation
     field :counter_loader, mutation: CounterLoaderMutation
     field :no_op, mutation: NoOpMutation
   end
 else
-  MutationType = GraphQL::ObjectType.define do
+  MutationType = GraphQL8::ObjectType.define do
     name "Mutation"
 
     field :incrementCounter, CounterType.to_non_null_type do
@@ -183,15 +183,15 @@ else
   end
 end
 
-class Schema < GraphQL::Schema
+class Schema < GraphQL8::Schema
   query QueryType
   mutation MutationType
 
   if ENV["TESTING_INTERPRETER"] == "true"
-    use GraphQL::Execution::Interpreter
+    use GraphQL8::Execution::Interpreter
     # This probably has no effect, but just to get the full test:
-    use GraphQL::Analysis::AST
+    use GraphQL8::Analysis::AST
   end
 
-  use GraphQL::Batch
+  use GraphQL8::Batch
 end

@@ -1,4 +1,4 @@
-class RecordLoader < GraphQL::Batch::Loader
+class RecordLoader < GraphQL8::Batch::Loader
   def initialize(model)
     @model = model
   end
@@ -13,7 +13,7 @@ class RecordLoader < GraphQL::Batch::Loader
   end
 end
 
-class AssociationLoader < GraphQL::Batch::Loader
+class AssociationLoader < GraphQL8::Batch::Loader
   def initialize(model, association)
     @model = model
     @association = association
@@ -25,7 +25,7 @@ class AssociationLoader < GraphQL::Batch::Loader
   end
 end
 
-class CounterLoader < GraphQL::Batch::Loader
+class CounterLoader < GraphQL8::Batch::Loader
   def cache_key(counter_array)
     counter_array.object_id
   end
@@ -35,7 +35,7 @@ class CounterLoader < GraphQL::Batch::Loader
   end
 end
 
-class NilLoader < GraphQL::Batch::Loader
+class NilLoader < GraphQL8::Batch::Loader
   def self.load
     self.for.load(nil)
   end

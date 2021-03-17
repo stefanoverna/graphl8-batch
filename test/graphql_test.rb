@@ -1,6 +1,6 @@
 require_relative 'test_helper'
 
-class GraphQL::GraphQLTest < Minitest::Test
+class GraphQL8::GraphQL8Test < Minitest::Test
   attr_reader :queries
 
   def setup

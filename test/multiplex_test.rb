@@ -1,6 +1,6 @@
 require_relative 'test_helper'
 
-class GraphQL::MultiplexTest < Minitest::Test
+class GraphQL8::MultiplexTest < Minitest::Test
   attr_reader :queries
 
   def setup

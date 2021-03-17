@@ -1,7 +1,7 @@
 require_relative 'test_helper'
 
-class GraphQL::Batch::CustomExecutorTest < Minitest::Test
-  class MyCustomExecutor < GraphQL::Batch::Executor
+class GraphQL8::Batch::CustomExecutorTest < Minitest::Test
+  class MyCustomExecutor < GraphQL8::Batch::Executor
     class << self
       attr_accessor :call_count
     end
@@ -14,11 +14,11 @@ class GraphQL::Batch::CustomExecutorTest < Minitest::Test
     end
   end
 
-  class Schema < GraphQL::Schema
+  class Schema < GraphQL8::Schema
     query ::QueryType
     mutation ::MutationType
 
-    use GraphQL::Batch, executor_class: MyCustomExecutor
+    use GraphQL8::Batch, executor_class: MyCustomExecutor
   end
 
   def setup
@@ -26,7 +26,7 @@ class GraphQL::Batch::CustomExecutorTest < Minitest::Test
   end
 
   def test_batch_accepts_custom_executor
-    product = GraphQL::Batch.batch(executor_class: MyCustomExecutor) do
+    product = GraphQL8::Batch.batch(executor_class: MyCustomExecutor) do
       RecordLoader.for(Product).load(1)
     end
 

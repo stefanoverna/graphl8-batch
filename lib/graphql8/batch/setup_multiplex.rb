@@ -1,4 +1,4 @@
-module GraphQL::Batch
+module GraphQL8::Batch
   class SetupMultiplex
     def initialize(schema, executor_class:)
       @schema = schema
